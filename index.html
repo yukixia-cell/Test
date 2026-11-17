@@ -1,23 +1,940 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tests</title>
+    <title>Smart Healthy Meals Solutions | Campus Nutrition & Budget Tracker</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for clean, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900">
 
-<body>
-    <h1>Smart Healthy Meals Solutions</h1>
+    <!-- Toast Notification Container (Replaces alert/confirm) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <h2>Diet</h2>
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <span class="font-display font-bold text-lg sm:text-xl tracking-tight text-slate-900">
+                    Smart<span class="text-emerald-600">Healthy</span>Meals
+                </span>
+            </div>
 
-    <ul>
-        <li>Meat</li>
-        <li>Carbohydrates</li>
-        <li>Fibre</li>
-        <li>Vitamins</li>
-    </ul>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                <a href="#pillars" class="hover:text-emerald-600 transition-colors">Dietary Pillars</a>
+                <a href="#calculator" class="hover:text-emerald-600 transition-colors">BMI & Calorie Needs</a>
+                <a href="#explorer" class="hover:text-emerald-600 transition-colors">Campus Meals</a>
+                <a href="#tracker" class="hover:text-emerald-600 transition-colors">Daily Log</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <a href="#tracker" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs sm:text-sm transition-colors border border-emerald-200">
+                    <span>Daily Log</span>
+                    <span id="nav-log-count" class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-bold">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section & Core Dietary Pillars -->
+    <section id="pillars" class="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 text-white py-14 sm:py-20">
+        <!-- Subtle decorative pattern -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-700/60 border border-emerald-500/40 text-emerald-100 text-xs font-semibold uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Campus Wellness & Student Budget Companion
+                    </div>
+                    <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                        Smart Healthy Meals Solutions
+                    </h1>
+                    <p class="text-emerald-100/90 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Empowering students to identify high-value, nutritious meals right on campus. Estimate your daily calorie needs based on your activity level, maintain a healthy BMI, and eat well without exceeding your student budget.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="#explorer" class="px-6 py-3.5 rounded-xl bg-white text-emerald-900 font-bold text-sm shadow-lg hover:bg-emerald-50 transition-all">
+                            Explore Campus Meals
+                        </a>
+                        <a href="#calculator" class="px-6 py-3.5 rounded-xl bg-emerald-700/70 hover:bg-emerald-700 text-white border border-emerald-500/40 font-semibold text-sm transition-all">
+                            Calculate My BMI & Calories
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Featured Visual + Core Diet Pillars -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="font-display font-bold text-lg text-white">Core Campus Diet Pillars</h2>
+                            <span class="text-xs text-emerald-200 font-medium">Balanced Nutrition</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <!-- Pillar 1: Meat / Lean Protein -->
+                            <div class="bg-white/10 hover:bg-white/15 transition-colors rounded-xl p-4 border border-white/10">
+                                <div class="w-9 h-9 rounded-lg bg-rose-500/20 text-rose-200 flex items-center justify-center mb-2.5 font-bold text-lg">🥩</div>
+                                <h3 class="font-bold text-white text-sm">Meat & Lean Protein</h3>
+                                <p class="text-xs text-emerald-100/80 mt-1 leading-relaxed">Supports muscle recovery, sustained satiety, and focus during long lectures.</p>
+                            </div>
+                            <!-- Pillar 2: Carbohydrates -->
+                            <div class="bg-white/10 hover:bg-white/15 transition-colors rounded-xl p-4 border border-white/10">
+                                <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-200 flex items-center justify-center mb-2.5 font-bold text-lg">🌾</div>
+                                <h3 class="font-bold text-white text-sm">Complex Carbohydrates</h3>
+                                <p class="text-xs text-emerald-100/80 mt-1 leading-relaxed">Steady brain fuel from whole grains, brown rice, oats, and legumes.</p>
+                            </div>
+                            <!-- Pillar 3: Fibre -->
+                            <div class="bg-white/10 hover:bg-white/15 transition-colors rounded-xl p-4 border border-white/10">
+                                <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-200 flex items-center justify-center mb-2.5 font-bold text-lg">🥦</div>
+                                <h3 class="font-bold text-white text-sm">Dietary Fibre</h3>
+                                <p class="text-xs text-emerald-100/80 mt-1 leading-relaxed">Promotes digestive health and prevents mid-afternoon energy crashes.</p>
+                            </div>
+                            <!-- Pillar 4: Vitamins -->
+                            <div class="bg-white/10 hover:bg-white/15 transition-colors rounded-xl p-4 border border-white/10">
+                                <div class="w-9 h-9 rounded-lg bg-sky-500/20 text-sky-200 flex items-center justify-center mb-2.5 font-bold text-lg">🍊</div>
+                                <h3 class="font-bold text-white text-sm">Essential Vitamins</h3>
+                                <p class="text-xs text-emerald-100/80 mt-1 leading-relaxed">Boosts immunity and cognitive clarity through fresh campus greens & fruits.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Application Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14">
+
+        <!-- 2. BMI & Personalized Daily Calorie Needs Calculator -->
+        <section id="calculator" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-100">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 1 • Personalize Your Profile</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-900 mt-1">BMI & Daily Calorie Needs Calculator</h2>
+                    <p class="text-sm text-slate-500 mt-1">Calculate your Body Mass Index and daily energy target based on your campus activity level.</p>
+                </div>
+                <div class="inline-flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 px-3.5 py-2 rounded-xl border border-emerald-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                    Auto-syncs with your Daily Calorie Tracker
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 mt-6 items-center">
+                <!-- Calculator Form -->
+                <form id="bmi-form" class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="calc-gender" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">Gender</label>
+                        <select id="calc-gender" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="calc-age" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">Age (Years)</label>
+                        <input type="number" id="calc-age" min="15" max="90" value="20" required class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                    </div>
+
+                    <div>
+                        <label for="calc-height" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">Height (cm)</label>
+                        <input type="number" id="calc-height" min="120" max="230" value="172" required class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                    </div>
+
+                    <div>
+                        <label for="calc-weight" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">Weight (kg)</label>
+                        <input type="number" id="calc-weight" min="35" max="200" step="0.5" value="65" required class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="calc-activity" class="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">Usual Campus Activity Level</label>
+                        <select id="calc-activity" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                            <option value="1.2">Sedentary (Mostly desk study, minimal walking)</option>
+                            <option value="1.375" selected>Lightly Active (Walking between lectures, light exercise 1-3x/wk)</option>
+                            <option value="1.55">Moderately Active (Campus sports or gym 3-5x/wk)</option>
+                            <option value="1.725">Very Active (Varsity athlete / intense daily training)</option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-2 pt-2">
+                        <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer">
+                            Calculate & Sync Daily Target
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Calculated Results Display -->
+                <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-6 border border-slate-200/80 space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/70 shadow-xs">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Your BMI</span>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="res-bmi" class="font-display text-3xl font-extrabold text-slate-900">22.0</span>
+                                <span class="text-xs text-slate-400">kg/m²</span>
+                            </div>
+                            <span id="res-bmi-badge" class="inline-block mt-2 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                Healthy Weight
+                            </span>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-xl border border-slate-200/70 shadow-xs">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Daily Calorie Target</span>
+                            <div class="flex items-baseline gap-1.5 mt-1">
+                                <span id="res-calories" class="font-display text-3xl font-extrabold text-emerald-600">2,265</span>
+                                <span class="text-xs font-medium text-slate-500">kcal</span>
+                            </div>
+                            <span class="inline-block mt-2 text-xs text-slate-500">
+                                To maintain healthy BMI
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Visual BMI Scale Bar -->
+                    <div>
+                        <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1.5">
+                            <span>Underweight (&lt;18.5)</span>
+                            <span class="text-emerald-700">Normal (18.5–24.9)</span>
+                            <span>Overweight (25+)</span>
+                        </div>
+                        <div class="relative h-3 w-full rounded-full overflow-hidden flex bg-slate-200">
+                            <div class="w-1/4 bg-sky-400 h-full"></div>
+                            <div class="w-2/4 bg-emerald-500 h-full"></div>
+                            <div class="w-1/4 bg-amber-400 h-full"></div>
+                        </div>
+                        <p id="res-advice" class="text-xs text-slate-600 mt-3 leading-relaxed">
+                            Your BMI is within the healthy range! Focus on balanced campus meals rich in lean meat/protein, complex carbs, fibre, and vitamins.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 & 4. Main Workspace: Campus Meal Explorer (Left) + Daily Tracker (Right) -->
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+            <!-- Left Column (8 cols): Campus Meal Explorer & Filters -->
+            <section id="explorer" class="lg:col-span-8 space-y-6">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 2 • Smart Campus Dining</span>
+                            <h2 class="font-display text-2xl font-bold text-slate-900 mt-0.5">Campus Meal Explorer</h2>
+                            <p class="text-sm text-slate-500">Compare nutritional value, calories, and student prices across campus canteens.</p>
+                        </div>
+                        <div class="text-right">
+                            <span id="meal-count-label" class="inline-block px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
+                                Showing 8 meals
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Filter & Sort Controls -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5">
+                        <!-- Max Price Budget Filter -->
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label for="filter-price" class="text-xs font-bold text-slate-700 uppercase">Max Meal Price</label>
+                                <span id="price-display" class="text-sm font-extrabold text-emerald-600">$12.00</span>
+                            </div>
+                            <input type="range" id="filter-price" min="4" max="15" step="0.5" value="12" class="w-full accent-emerald-600 cursor-pointer">
+                            <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                                <span>$4.00</span>
+                                <span>$15.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Dietary Focus Filter -->
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <label for="filter-diet" class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Dietary Focus</label>
+                            <select id="filter-diet" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="all">All Campus Meals</option>
+                                <option value="protein">High Protein / Lean Meat</option>
+                                <option value="carbs">Complex Carbohydrates</option>
+                                <option value="fibre">High Dietary Fibre</option>
+                                <option value="vitamins">Vitamin-Rich Greens & Bowls</option>
+                            </select>
+                        </div>
+
+                        <!-- Sort By Selector -->
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <label for="sort-meals" class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Sort By</label>
+                            <select id="sort-meals" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="health">Highest Health Score</option>
+                                <option value="price">Lowest Price ($)</option>
+                                <option value="calories">Lowest Calories (kcal)</option>
+                                <option value="protein">Highest Protein (g)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meals Grid -->
+                <div id="meals-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Meal Cards are dynamically injected by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Right Column (4 cols): Sticky Daily Calorie, Nutrition & Budget Tracker -->
+            <aside id="tracker" class="lg:col-span-4 lg:sticky lg:top-20 space-y-6">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 3 • Daily Log</span>
+                            <h2 class="font-display text-xl font-bold text-slate-900">Nutrition & Budget Tracker</h2>
+                        </div>
+                        <button id="reset-log-btn" class="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer">
+                            Reset Day
+                        </button>
+                    </div>
+
+                    <!-- Calorie Progress Bar -->
+                    <div class="mt-5 space-y-2">
+                        <div class="flex justify-between items-baseline">
+                            <span class="text-xs font-bold uppercase text-slate-500">Daily Calorie Intake</span>
+                            <div class="text-sm font-bold text-slate-900">
+                                <span id="log-total-cals" class="text-emerald-600 text-lg">0</span>
+                                <span class="text-slate-400 font-normal">/ <span id="log-goal-cals">2,265</span> kcal</span>
+                            </div>
+                        </div>
+                        <div class="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
+                            <div id="calorie-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+                        <p id="calorie-status-text" class="text-xs text-slate-500">
+                            Add meals from the explorer to track your daily intake.
+                        </p>
+                    </div>
+
+                    <!-- Student Daily Food Budget Tracker -->
+                    <div class="mt-5 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <label for="daily-budget-input" class="text-xs font-bold uppercase text-slate-600">Daily Food Budget ($)</label>
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs font-bold text-slate-500">$</span>
+                                <input type="number" id="daily-budget-input" value="18.00" min="5" max="100" step="1" class="w-16 text-right font-bold text-sm bg-white border border-slate-300 rounded-lg px-2 py-1 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm pt-1">
+                            <span class="text-slate-600 font-medium">Total Spent Today:</span>
+                            <span id="log-total-cost" class="font-display font-extrabold text-lg text-slate-900">$0.00</span>
+                        </div>
+                        <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                            <div id="budget-progress-bar" class="h-full bg-sky-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        </div>
+                        <p id="budget-status-text" class="text-[11px] font-medium text-emerald-700">
+                            $18.00 remaining in today's campus meal budget.
+                        </p>
+                    </div>
+
+                    <!-- 4 Core Dietary Pillars Macro Summary -->
+                    <div class="mt-5">
+                        <h3 class="text-xs font-bold uppercase text-slate-500 mb-2.5">Nutrient Breakdown (4 Pillars)</h3>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="p-2.5 rounded-xl bg-rose-50/70 border border-rose-100">
+                                <span class="block text-[11px] font-semibold text-rose-700">Protein (Meat)</span>
+                                <span id="log-total-protein" class="font-display font-bold text-base text-slate-900">0g</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-amber-50/70 border border-amber-100">
+                                <span class="block text-[11px] font-semibold text-amber-700">Carbs</span>
+                                <span id="log-total-carbs" class="font-display font-bold text-base text-slate-900">0g</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
+                                <span class="block text-[11px] font-semibold text-emerald-700">Fibre</span>
+                                <span id="log-total-fibre" class="font-display font-bold text-base text-slate-900">0g</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logged Meals List -->
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <h3 class="text-xs font-bold uppercase text-slate-500">Today's Selected Meals</h3>
+                            <span id="logged-items-badge" class="text-xs font-semibold text-slate-400">0 items</span>
+                        </div>
+                        <div id="logged-meals-list" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                            <!-- Empty State -->
+                            <div class="text-center py-8 px-4 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+                                <p class="text-sm font-medium text-slate-500">No meals logged yet</p>
+                                <p class="text-xs mt-1">Click "+ Add to Daily Log" on any campus meal card to start tracking.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div class="font-semibold text-slate-700">
+                Smart Healthy Meals Solutions • Campus Student Wellness Initiative
+            </div>
+            <div>
+                High-resolution food photography courtesy of Unsplash & Pexels.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application JavaScript -->
+    <script>
+        // =========================================================================
+        // 1. CAMPUS MEALS DATASET (Curated with Unsplash & Pexels High-Res Photos)
+        // =========================================================================
+        const campusMeals = [
+            {
+                id: 1,
+                name: "Grilled Herb Chicken & Quinoa Power Bowl",
+                location: "North Campus Greenway Cafe",
+                price: 6.50,
+                calories: 490,
+                protein: 42,
+                carbs: 46,
+                fibre: 9,
+                vitamins: "Vitamins A, C, B6 & Iron",
+                focus: ["protein", "fibre", "vitamins"],
+                healthScore: 96,
+                budgetFriendly: true,
+                source: "Unsplash",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
+                description: "Lean grilled chicken breast paired with fluffy quinoa, roasted sweet potatoes, baby spinach, and avocado."
+            },
+            {
+                id: 2,
+                name: "Teriyaki Salmon & Brown Rice Bento",
+                location: "Science Hub Food Court",
+                price: 8.50,
+                calories: 560,
+                protein: 36,
+                carbs: 58,
+                fibre: 7,
+                vitamins: "Omega-3, Vitamin D & B12",
+                focus: ["protein", "carbs"],
+                healthScore: 93,
+                budgetFriendly: false,
+                source: "Unsplash",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+                description: "Pan-seared salmon fillet glazed with low-sodium teriyaki over steamed wholegrain brown rice and edamame."
+            },
+            {
+                id: 3,
+                name: "Mediterranean Chickpea & Lentil Salad",
+                location: "Student Union Express",
+                price: 5.00,
+                calories: 410,
+                protein: 19,
+                carbs: 52,
+                fibre: 14,
+                vitamins: "Vitamins C, K, Folate & Potassium",
+                focus: ["fibre", "vitamins", "carbs"],
+                healthScore: 95,
+                budgetFriendly: true,
+                source: "Pexels",
+                image: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Hearty plant-based bowl packed with chickpeas, green lentils, cherry tomatoes, cucumber, and lemon-olive dressing."
+            },
+            {
+                id: 4,
+                name: "Lean Turkey & Avocado Wholegrain Wrap",
+                location: "Library Grab & Go",
+                price: 5.50,
+                calories: 430,
+                protein: 31,
+                carbs: 44,
+                fibre: 8,
+                vitamins: "Vitamins E, B3 & Magnesium",
+                focus: ["protein", "carbs"],
+                healthScore: 90,
+                budgetFriendly: true,
+                source: "Pexels",
+                image: "https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Sliced roasted turkey breast, smashed avocado, crisp romaine, and hummus rolled in a high-fibre whole wheat tortilla."
+            },
+            {
+                id: 5,
+                name: "Berry Chia & Rolled Oats Breakfast Pot",
+                location: "Morning Brew Kiosk",
+                price: 4.50,
+                calories: 360,
+                protein: 15,
+                carbs: 54,
+                fibre: 11,
+                vitamins: "Antioxidants, Vitamin C & Calcium",
+                focus: ["carbs", "fibre", "vitamins"],
+                healthScore: 92,
+                budgetFriendly: true,
+                source: "Unsplash",
+                image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&w=800&q=80",
+                description: "Slow-release rolled oats soaked in almond milk with chia seeds, fresh blueberries, and sliced bananas."
+            },
+            {
+                id: 6,
+                name: "Stir-Fried Lean Beef & Broccoli Bowl",
+                location: "Engineering Canteen Stall 4",
+                price: 6.80,
+                calories: 510,
+                protein: 38,
+                carbs: 49,
+                fibre: 7,
+                vitamins: "Iron, Zinc, Vitamin C & K",
+                focus: ["protein", "vitamins"],
+                healthScore: 89,
+                budgetFriendly: true,
+                source: "Pexels",
+                image: "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Tender lean beef strips wok-tossed with crisp broccoli florets, bell peppers, and garlic ginger sauce over red rice."
+            },
+            {
+                id: 7,
+                name: "Roasted Veggie & Tofu Buddha Bowl",
+                location: "Arts Quad Eco-Kitchen",
+                price: 5.80,
+                calories: 445,
+                protein: 24,
+                carbs: 50,
+                fibre: 13,
+                vitamins: "Vitamins A, C, E & Calcium",
+                focus: ["fibre", "vitamins"],
+                healthScore: 94,
+                budgetFriendly: true,
+                source: "Unsplash",
+                image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80",
+                description: "Baked sesame tofu with roasted pumpkin, kale, shredded carrots, and black beans drizzled with tahini."
+            },
+            {
+                id: 8,
+                name: "Poached Egg & Smashed Avo Sourdough",
+                location: "Campus Commons Bistro",
+                price: 6.00,
+                calories: 420,
+                protein: 21,
+                carbs: 38,
+                fibre: 9,
+                vitamins: "Vitamins D, E, B12 & Folate",
+                focus: ["protein", "carbs", "fibre"],
+                healthScore: 91,
+                budgetFriendly: true,
+                source: "Pexels",
+                image: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Two free-range poached eggs over artisan multigrain sourdough with smashed avocado, cherry tomatoes, and pumpkin seeds."
+            }
+        ];
+
+        // =========================================================================
+        // 2. APPLICATION STATE
+        // =========================================================================
+        let state = {
+            dailyCalorieGoal: 2265,
+            dailyBudget: 18.00,
+            loggedMeals: [],
+            filters: {
+                maxPrice: 12.00,
+                diet: 'all',
+                sortBy: 'health'
+            }
+        };
+
+        // =========================================================================
+        // 3. UTILITY: TOAST MESSAGE BOX (No alert/confirm)
+        // =========================================================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-slate-900 text-white' : 'bg-amber-600 text-white';
+
+            toast.className = `${bgColor} px-4 py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium flex items-center gap-2.5 transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <span class="w-2 h-2 rounded-full ${type === 'success' ? 'bg-emerald-400' : 'bg-white'}"></span>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2600);
+        }
+
+        // =========================================================================
+        // 4. BMI & CALORIE CALCULATOR LOGIC (Mifflin-St Jeor Equation)
+        // =========================================================================
+        function calculateBMIAndCalories(e) {
+            if (e) e.preventDefault();
+
+            const gender = document.getElementById('calc-gender').value;
+            const age = parseFloat(document.getElementById('calc-age').value) || 20;
+            const heightCm = parseFloat(document.getElementById('calc-height').value) || 172;
+            const weightKg = parseFloat(document.getElementById('calc-weight').value) || 65;
+            const activityFactor = parseFloat(document.getElementById('calc-activity').value) || 1.375;
+
+            // BMI Calculation: weight (kg) / [height (m)]^2
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+            const roundedBMI = bmi.toFixed(1);
+
+            // BMR (Mifflin-St Jeor)
+            let bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age);
+            bmr += (gender === 'male') ? 5 : -161;
+
+            // Total Daily Energy Expenditure (TDEE)
+            const tdee = Math.round(bmr * activityFactor);
+
+            // Determine BMI Category & Personalized Student Nutrition Tip
+            let category = '';
+            let badgeClasses = '';
+            let advice = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                badgeClasses = 'bg-sky-100 text-sky-800';
+                advice = 'Your BMI is below 18.5. Prioritize nutrient-dense campus meals rich in complex carbohydrates and lean meats/proteins to build healthy mass.';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category = 'Healthy Weight';
+                badgeClasses = 'bg-emerald-100 text-emerald-800';
+                advice = 'Great job! Your BMI is in the healthy range. Maintain it by balancing protein, complex carbs, fibre, and vitamins within your daily target.';
+            } else if (bmi >= 25 && bmi < 30) {
+                category = 'Overweight';
+                badgeClasses = 'bg-amber-100 text-amber-800';
+                advice = 'Your BMI is slightly above the normal range. Opt for high-fibre, high-protein campus bowls that keep you full on fewer calories.';
+            } else {
+                category = 'Obese Range';
+                badgeClasses = 'bg-rose-100 text-rose-800';
+                advice = 'Focus on portion-controlled, high-fibre vegetables and lean proteins on campus while staying active between classes.';
+            }
+
+            // Update Calculator UI
+            document.getElementById('res-bmi').textContent = roundedBMI;
+            const badgeEl = document.getElementById('res-bmi-badge');
+            badgeEl.textContent = category;
+            badgeEl.className = `inline-block mt-2 px-2.5 py-0.5 rounded-full text-xs font-bold ${badgeClasses}`;
+            document.getElementById('res-calories').textContent = tdee.toLocaleString();
+            document.getElementById('res-advice').textContent = advice;
+
+            // Sync with Daily Tracker
+            state.dailyCalorieGoal = tdee;
+            updateTrackerUI();
+
+            if (e) {
+                showToast(`Synced! Daily calorie target set to ${tdee.toLocaleString()} kcal.`);
+            }
+        }
+
+        // =========================================================================
+        // 5. RENDER & FILTER CAMPUS MEALS
+        // =========================================================================
+        function renderMeals() {
+            const grid = document.getElementById('meals-grid');
+            const { maxPrice, diet, sortBy } = state.filters;
+
+            // Filter by Price and Dietary Focus
+            let filtered = campusMeals.filter(meal => {
+                const matchesPrice = meal.price <= maxPrice;
+                const matchesDiet = diet === 'all' || meal.focus.includes(diet);
+                return matchesPrice && matchesDiet;
+            });
+
+            // Sort Results
+            filtered.sort((a, b) => {
+                if (sortBy === 'price') return a.price - b.price;
+                if (sortBy === 'calories') return a.calories - b.calories;
+                if (sortBy === 'protein') return b.protein - a.protein;
+                return b.healthScore - a.healthScore; // Default: highest health score
+            });
+
+            document.getElementById('meal-count-label').textContent = `Showing ${filtered.length} meal${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="md:col-span-2 bg-white rounded-3xl border border-slate-200 p-10 text-center">
+                        <p class="font-display font-bold text-lg text-slate-800">No campus meals match your current filters</p>
+                        <p class="text-sm text-slate-500 mt-1">Try increasing your max price slider or selecting "All Campus Meals".</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(meal => `
+                <article class="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+                    <div>
+                        <!-- Food Photo Header -->
+                        <div class="relative h-48 w-full overflow-hidden bg-slate-100">
+                            <img 
+                                src="${meal.image}" 
+                                alt="${meal.name}" 
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='https://placehold.co/800x500/ecfdf5/065f46?text=Healthy+Campus+Meal';"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            >
+                            <!-- Top Badges -->
+                            <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 rounded-lg bg-emerald-600/95 backdrop-blur-xs text-white text-xs font-bold shadow-xs">
+                                    Health Score: ${meal.healthScore}/100
+                                </span>
+                                ${meal.budgetFriendly ? `
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-400/95 backdrop-blur-xs text-slate-900 text-xs font-extrabold shadow-xs">
+                                        Budget Value
+                                    </span>
+                                ` : ''}
+                            </div>
+                            <!-- Price Tag -->
+                            <div class="absolute bottom-3 right-3 px-3 py-1 rounded-xl bg-slate-900/90 backdrop-blur-xs text-white font-display font-extrabold text-base shadow-sm">
+                                $${meal.price.toFixed(2)}
+                            </div>
+                        </div>
+
+                        <!-- Meal Details -->
+                        <div class="p-5">
+                            <div class="flex items-center justify-between text-xs text-slate-500 font-medium mb-1">
+                                <span>📍 ${meal.location}</span>
+                                <span class="font-bold text-slate-700">${meal.calories} kcal</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg text-slate-900 leading-snug">
+                                ${meal.name}
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
+                                ${meal.description}
+                            </p>
+
+                            <!-- 4 Dietary Pillars Nutritional Grid -->
+                            <div class="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-100 text-center">
+                                <div class="bg-slate-50 rounded-xl py-2 px-1">
+                                    <span class="block text-[10px] font-bold uppercase text-rose-600">Protein</span>
+                                    <span class="text-xs font-extrabold text-slate-800">${meal.protein}g</span>
+                                </div>
+                                <div class="bg-slate-50 rounded-xl py-2 px-1">
+                                    <span class="block text-[10px] font-bold uppercase text-amber-600">Carbs</span>
+                                    <span class="text-xs font-extrabold text-slate-800">${meal.carbs}g</span>
+                                </div>
+                                <div class="bg-slate-50 rounded-xl py-2 px-1">
+                                    <span class="block text-[10px] font-bold uppercase text-emerald-600">Fibre</span>
+                                    <span class="text-xs font-extrabold text-slate-800">${meal.fibre}g</span>
+                                </div>
+                            </div>
+
+                            <!-- Vitamins Pill -->
+                            <div class="mt-2.5 flex items-center gap-1.5 text-[11px] font-medium text-sky-700 bg-sky-50 px-3 py-1.5 rounded-xl">
+                                <span>🍊</span>
+                                <span class="truncate">${meal.vitamins}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="px-5 pb-5">
+                        <button 
+                            onclick="addMealToLog(${meal.id})"
+                            class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                            <span>Add to Daily Log</span>
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // =========================================================================
+        // 6. DAILY NUTRITION & BUDGET TRACKER LOGIC
+        // =========================================================================
+        function addMealToLog(mealId) {
+            const meal = campusMeals.find(m => m.id === mealId);
+            if (!meal) return;
+
+            state.loggedMeals.push({
+                ...meal,
+                logEntryId: Date.now() + Math.random()
+            });
+
+            updateTrackerUI();
+            showToast(`Added "${meal.name}" (${meal.calories} kcal)`);
+        }
+
+        function removeMealFromLog(logEntryId) {
+            state.loggedMeals = state.loggedMeals.filter(item => item.logEntryId !== logEntryId);
+            updateTrackerUI();
+        }
+
+        function resetDailyLog() {
+            if (state.loggedMeals.length === 0) return;
+            state.loggedMeals = [];
+            updateTrackerUI();
+            showToast('Daily log reset for a fresh start.');
+        }
+
+        function updateTrackerUI() {
+            // Sum totals
+            const totals = state.loggedMeals.reduce((acc, item) => {
+                acc.calories += item.calories;
+                acc.cost += item.price;
+                acc.protein += item.protein;
+                acc.carbs += item.carbs;
+                acc.fibre += item.fibre;
+                return acc;
+            }, { calories: 0, cost: 0, protein: 0, carbs: 0, fibre: 0 });
+
+            // Update Navbar & Section Badges
+            document.getElementById('nav-log-count').textContent = state.loggedMeals.length;
+            document.getElementById('logged-items-badge').textContent = `${state.loggedMeals.length} item${state.loggedMeals.length === 1 ? '' : 's'}`;
+
+            // Update Calorie Progress
+            document.getElementById('log-total-cals').textContent = totals.calories.toLocaleString();
+            document.getElementById('log-goal-cals').textContent = state.dailyCalorieGoal.toLocaleString();
+
+            const calPercent = Math.min(100, Math.round((totals.calories / state.dailyCalorieGoal) * 100));
+            const calBar = document.getElementById('calorie-progress-bar');
+            calBar.style.width = `${calPercent}%`;
+
+            const calStatus = document.getElementById('calorie-status-text');
+            const remainingCals = state.dailyCalorieGoal - totals.calories;
+
+            if (totals.calories === 0) {
+                calBar.className = 'h-full bg-emerald-500 rounded-full transition-all duration-300';
+                calStatus.textContent = 'Add meals from the explorer to track your daily intake.';
+                calStatus.className = 'text-xs text-slate-500';
+            } else if (remainingCals >= 0) {
+                calBar.className = 'h-full bg-emerald-500 rounded-full transition-all duration-300';
+                calStatus.textContent = `${remainingCals.toLocaleString()} kcal remaining to reach your daily target (${calPercent}%).`;
+                calStatus.className = 'text-xs font-medium text-emerald-700';
+            } else {
+                calBar.className = 'h-full bg-amber-500 rounded-full transition-all duration-300';
+                calStatus.textContent = `${Math.abs(remainingCals).toLocaleString()} kcal over your daily target.`;
+                calStatus.className = 'text-xs font-semibold text-amber-700';
+            }
+
+            // Update Budget Progress
+            document.getElementById('log-total-cost').textContent = `$${totals.cost.toFixed(2)}`;
+            const budgetPercent = Math.min(100, Math.round((totals.cost / state.dailyBudget) * 100));
+            const budgetBar = document.getElementById('budget-progress-bar');
+            budgetBar.style.width = `${budgetPercent}%`;
+
+            const budgetStatus = document.getElementById('budget-status-text');
+            const remainingBudget = state.dailyBudget - totals.cost;
+
+            if (remainingBudget >= 0) {
+                budgetBar.className = 'h-full bg-sky-500 rounded-full transition-all duration-300';
+                budgetStatus.textContent = `$${remainingBudget.toFixed(2)} remaining in today's campus meal budget.`;
+                budgetStatus.className = 'text-[11px] font-medium text-emerald-700';
+            } else {
+                budgetBar.className = 'h-full bg-rose-500 rounded-full transition-all duration-300';
+                budgetStatus.textContent = `$${Math.abs(remainingBudget).toFixed(2)} over your daily student budget.`;
+                budgetStatus.className = 'text-[11px] font-bold text-rose-600';
+            }
+
+            // Update Macros
+            document.getElementById('log-total-protein').textContent = `${totals.protein}g`;
+            document.getElementById('log-total-carbs').textContent = `${totals.carbs}g`;
+            document.getElementById('log-total-fibre').textContent = `${totals.fibre}g`;
+
+            // Render Logged Meals List
+            const listContainer = document.getElementById('logged-meals-list');
+            if (state.loggedMeals.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8 px-4 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+                        <p class="text-sm font-medium text-slate-500">No meals logged yet</p>
+                        <p class="text-xs mt-1">Click "+ Add to Daily Log" on any campus meal card to start tracking.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = state.loggedMeals.map(item => `
+                <div class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/70">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-slate-800 truncate">${item.name}</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">
+                            ${item.calories} kcal • ${item.protein}g P • <span class="font-semibold text-emerald-700">$${item.price.toFixed(2)}</span>
+                        </p>
+                    </div>
+                    <button 
+                        onclick="removeMealFromLog(${item.logEntryId})"
+                        title="Remove meal"
+                        class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // =========================================================================
+        // 7. EVENT LISTENERS & INITIALIZATION
+        // =========================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Calculator Form
+            document.getElementById('bmi-form').addEventListener('submit', calculateBMIAndCalories);
+
+            // Price Slider
+            const priceInput = document.getElementById('filter-price');
+            priceInput.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                state.filters.maxPrice = val;
+                document.getElementById('price-display').textContent = `$${val.toFixed(2)}`;
+                renderMeals();
+            });
+
+            // Dietary Focus Select
+            document.getElementById('filter-diet').addEventListener('change', (e) => {
+                state.filters.diet = e.target.value;
+                renderMeals();
+            });
+
+            // Sort Select
+            document.getElementById('sort-meals').addEventListener('change', (e) => {
+                state.filters.sortBy = e.target.value;
+                renderMeals();
+            });
+
+            // Daily Budget Input
+            document.getElementById('daily-budget-input').addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                state.dailyBudget = val > 0 ? val : 1;
+                updateTrackerUI();
+            });
+
+            // Reset Day Button
+            document.getElementById('reset-log-btn').addEventListener('click', resetDailyLog);
+
+            // Initial Render
+            calculateBMIAndCalories();
+            renderMeals();
+            updateTrackerUI();
+        });
+    </script>
 </body>
-
 </html>
